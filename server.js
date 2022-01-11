@@ -1,8 +1,17 @@
 const createError = require("http-errors");
 const express = require("express");
-const path = require('path');
+const path = require("path");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const passport = require("passport");
+const authenticate = require("./authenticate");
+
+const indexRouter = require("./routes/index");
+const users = require("./routes/users");
+const homeRouter = require("./routes/homeRouter");
+const portfolioRouter = require("./routes/portfolioRouter");
+const servicesRouter = require("./routes/servicesRouter");
+const contactRouter = require("./routes/contactRouter");
 
 const url = config.mongoUrl;
 
@@ -15,21 +24,15 @@ const connect = mongoose.connect(url, {
 
 connect.then(
   () => console.log("Connected correctly to server!"),
-  err => console.log(err)
+  (err) => console.log(err)
 );
-
-const indexRouter = require('./routes/index');
-const userRouter = require("./routes/userRouter");
-const homeRouter = require("./routes/homeRouter");
-const portfolioRouter = require("./routes/portfolioRouter");
-const servicesRouter = require("./routes/servicesRouter");
-const contactRouter = require("./routes/contactRouter");
 
 const app = express();
 
 app.use(morgan("dev"));
 app.use(express.json());
 
+app.use("/users", usersRouter);
 app.use("/home", homeRouter);
 app.use("/portfolio", portfolioRouter);
 app.use("/services", servicesRouter);
